@@ -1,5 +1,6 @@
 package com.cts.main;
 
+import org.apache.log4j.Logger;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
@@ -11,18 +12,20 @@ import java.io.*;
 
 public class Problem2 {
 
-	public static void main(String[] args) {
-		String inputFile = "sampleXml.xml";
-		String outputFile = "outputXml.xml";
+	private Logger log = Logger.getLogger(Problem2.class.getName());
+	
+	public void removeEmptyNodesFromXmlFile() {
+		String inputFilePath = "sampleXml.xml";
+		String outputFilePath = "outputXml.xml";
 
 		try {
 			// Parsing the input XML file
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(new File(inputFile));
+			Document doc = builder.parse(new File(inputFilePath));
 
 			// Removing empty nodes from the document
-			removeEmptyNodes(doc);
+			Utilities.removeEmptyNodes(doc);
 
 			// Creating a new XML document for the remaining node names
 			Document resultDoc = builder.newDocument();
@@ -30,49 +33,18 @@ public class Problem2 {
 			resultDoc.appendChild(rootElement);
 
 			// Extracting node names from the modified document
-			extractNodeNames(doc.getDocumentElement(), rootElement);
+			Utilities.extractNodeNames(doc.getDocumentElement(), rootElement);
 
 			// Writing the new XML document to a file
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 			Transformer transformer = transformerFactory.newTransformer();
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.transform(new DOMSource(resultDoc), new StreamResult(new File(outputFile)));
+			transformer.transform(new DOMSource(resultDoc), new StreamResult(new File(outputFilePath)));
 
-			System.out.println("New XML file created successfully!");
+			log.info("New XML file created successfully! Output file: "+ outputFilePath);
 
 		} catch (ParserConfigurationException | SAXException | IOException | TransformerException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private static void removeEmptyNodes(Node node) {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = childNodes.getLength() - 1; i >= 0; i--) {
-			Node child = childNodes.item(i);
-
-			if (child.getNodeType() == Node.ELEMENT_NODE) {
-				removeEmptyNodes(child);
-
-				if (child.getChildNodes().getLength() == 0) {
-					node.removeChild(child);
-				}
-			}
-		}
-	}
-
-	private static void extractNodeNames(Node node, Element rootElement) {
-		NodeList childNodes = node.getChildNodes();
-		for (int i = 0; i < childNodes.getLength(); i++) {
-			Node child = childNodes.item(i);
-
-			if (child.getNodeType() == Node.ELEMENT_NODE) {
-				Element element = (Element) child;
-				Element nodeNameElement = rootElement.getOwnerDocument().createElement("Node");
-				nodeNameElement.setTextContent(element.getNodeName());
-				rootElement.appendChild(nodeNameElement);
-
-				extractNodeNames(child, rootElement);
-			}
+			log.error("Error occured while processing XML file : ", e);
 		}
 	}
 }

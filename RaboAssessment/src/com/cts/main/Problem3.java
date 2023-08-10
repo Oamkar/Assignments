@@ -5,14 +5,24 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Problem3 {
-	public static void main(String[] args) {
+	
+	private Logger log = Logger.getLogger(Problem3.class.getName());
+	
+	@SuppressWarnings("unchecked")
+	public void removeEmptyNodesAndWriteAllRemainingNodeNamesToNewFile() {
 		try {
+			
+			String inputFilePath = "Sample.Json";
+			String outputFilePath = "json-output.txt";
+			
 			// Read JSON file as a string
-			String json = new String(Files.readAllBytes(Paths.get("Sample.Json")));
+			String json = new String(Files.readAllBytes(Paths.get(inputFilePath)));
 
 			// Parse JSON string to JsonNode
 			ObjectMapper mapper = new ObjectMapper();
@@ -22,28 +32,19 @@ public class Problem3 {
 			Map<String, JsonNode> nodeMap = mapper.convertValue(rootNode, Map.class);
 
 			// Find the first node value with only numbers
-			String nodeName = nodeMap.entrySet().stream().filter(entry -> isNumeric(entry.getValue()))
+			String nodeName = nodeMap.entrySet().stream().filter(entry -> Utilities.isNumeric(entry.getValue()))
 					.map(Map.Entry::getKey).findFirst().orElse("");
 
 			// Write the node name to a text file
 			if (!nodeName.isEmpty()) {
-				Files.write(Paths.get("json-output.txt"), nodeName.getBytes());
-				System.out.println("Node name written to output.txt");
+				Files.write(Paths.get(outputFilePath), nodeName.getBytes());
+				log.info("Node name written to "+ outputFilePath);
 			} else {
-				System.out.println("No matching node found");
+				log.warn("No matching node found");
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Exception occured while removing empty nodes "
+					+ "and write all remaining node names to new file", e);
 		}
-	}
-
-	private static boolean isNumeric(JsonNode value) {
-		if (value.isNumber()) {
-			return true;
-		} else if (value.isTextual()) {
-			String text = value.asText();
-			return text.matches("[0-9]+");
-		}
-		return false;
 	}
 }

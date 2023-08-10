@@ -7,10 +7,15 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import org.apache.log4j.Logger;
+
+import com.cts.main.config.ApplicationProperties;
 import com.cts.main.model.Booking;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Problem5 {
+	
+	private Logger log = Logger.getLogger(Problem1.class.getName());
 	
 	public void execute() {
 		getBookingIds();
@@ -20,14 +25,14 @@ public class Problem5 {
 	private void getBookingIds() {
 
 		try {
-			URL url = new URL("https://restful-booker.herokuapp.com/booking");
+			URL url = new URL(ApplicationProperties.getProperty("url.load-booking-ids"));
 
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 
 			int responseCode = connection.getResponseCode();
 
-			if (responseCode == HttpURLConnection.HTTP_OK) { // If the request was successful
+			if (responseCode == HttpURLConnection.HTTP_OK) {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				String line;
 				StringBuilder response = new StringBuilder();
@@ -37,22 +42,21 @@ public class Problem5 {
 				}
 				reader.close();
 
-				System.out.println(response.toString());
+				log.info("GetBookingIds Response: "+ response.toString());
 			} else {
-				System.out.println("GET request failed. Response Code: " + responseCode);
+				log.warn("GET request failed. Response Code: " + responseCode);
 			}
-
 			connection.disconnect();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception occured while calling GetBookingIds : ", e);
 		}
 	}
 
 	public void createBooking() {
 		try {
 			// Create a URL object with the desired URL
-			URL url = new URL("https://restful-booker.herokuapp.com/booking");
+			URL url = new URL(ApplicationProperties.getProperty("url.create-new-booking"));
 
 			// Open a connection to the URL
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -95,12 +99,12 @@ public class Problem5 {
 			reader.close();
 
 			// Print the response
-			System.out.println("Response: " + response.toString());
+			log.info("CreateBooking Response: "+ response.toString());
 
 			// Disconnect the connection
 			connection.disconnect();
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Exception occured while calling createBooking : ", e);
 		}
 	}
 }

@@ -5,19 +5,22 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 public class Problem1 {
 	
-	private static final Logger LOGGER = Logger.getLogger(Problem1.class.getName());
-
-	public void convertFirstCharacter() {
-		String inputFilePath = "SampleText.rtf";
-		String outputFilePath = "SampleTextOutput.rtf";
+	private Logger log = Logger.getLogger(Problem1.class.getName());
+	
+	private final static String OUTPUT_FILE_PATH = "outputFiles/";
+	
+	/**
+	 * Read the given text file and write to new file setting 
+	 * First character of each sentence to Capital letter
+	 */
+	public void convertFirstCharacterToUpperCase(String inputFilePath, String outputFile) {
 
 		try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath));
-				BufferedWriter bw = new BufferedWriter(new FileWriter(outputFilePath))) {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(OUTPUT_FILE_PATH + outputFile))) {
 
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -25,21 +28,20 @@ public class Problem1 {
 				bw.write(modifiedLine);
 				bw.newLine();
 			}
-
-			LOGGER.info("Conversion successful! Output file: {}" + outputFilePath);
-			LOGGER.info("Conversion successful! Output file: "+ outputFilePath);
-			System.out.println("Conversion successful! Output file: " + outputFilePath);
+			
+			log.info("First Character To UpperCase Conversion successful! Output file: "+ outputFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Exception occured while converting the first character in rtf to upperCase", e);
 		}
 	}
 
-	public void filterSpecialCharacters() {
-		String inputFilePath = "SampleText.rtf";
-		String outputFilePath = "FilterSpecialCharactersOutput.rtf";
+	/**
+	 * Read the given text file and filter the Special character and Write to a new file
+	 */
+	public void filterSpecialCharacters(String inputFilePath, String outputFile) {
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
-				BufferedWriter writer = new BufferedWriter(new FileWriter(outputFilePath))) {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(OUTPUT_FILE_PATH + outputFile))) {
 
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -50,16 +52,17 @@ public class Problem1 {
 				}
 			}
 
-			System.out.println("Special characters extracted and written to output file: " + outputFilePath);
+			log.info("Special characters extracted and written to output file: " + outputFile);
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Exception occured while filtering special characters in rtf", e);
 		}
 	}
 	
-	public void reverseLongestWord() {
-		// Input and output file paths
-		String inputFilePath = "SampleText.rtf";
-		String outputFilePath = "ReversedLongestWord.rtf";
+	/**
+	 * Read the Given text file and find out longest word and 
+	 * reverse the longest word and write the whole text to another file
+	 */
+	public void reverseLongestWord(String inputFilePath, String outputFile) {
 
 		// Read the contents of the input file
 		String content = Utilities.readFile(inputFilePath);
@@ -71,6 +74,7 @@ public class Problem1 {
 		String reversedWord = Utilities.reverseWord(longestWord);
 
 		// Write the reversed word to the output file
-		Utilities.writeFile(outputFilePath, reversedWord);
+		Utilities.writeFile(OUTPUT_FILE_PATH + outputFile, reversedWord);
+		log.info("Reverse longest word and written to output file: " + outputFile);
 	}
 }
