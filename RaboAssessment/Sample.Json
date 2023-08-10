@@ -1,0 +1,36 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2706
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+{\*\expandedcolortbl;;\cssrgb\c0\c0\c0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs26 \cf0 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 \{"widget": \{\
+    "debug": "on",\
+    "window": \{\
+        "title": "Sample Konfabulator Widget",\
+        "name": "main_window",\
+        "width": 500,\
+        "height": 500\
+    \},\
+    "image": \{ \
+        "src": "Images/Sun.png",\
+        "name": "sun1",\
+        "hOffset": 250,\
+        "vOffset": 250,\
+        "alignment": "center"\
+    \},\
+    "text": \{\
+        "data": "Click Here",\
+        "size": 36,\
+        "style": "bold",\
+        "name": "text1",\
+        "hOffset": 250,\
+        "vOffset": 100,\
+        "alignment": "center",\
+        "onMouseUp": "sun1.opacity = (sun1.opacity / 100) * 90;"\
+    \}\
+\}\}\
+}
