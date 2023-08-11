@@ -11,8 +11,6 @@ public class Problem1 {
 	
 	private Logger log = Logger.getLogger(Problem1.class.getName());
 	
-	private final static String OUTPUT_FILE_PATH = "outputFiles/";
-	
 	/**
 	 * Read the given text file and write to new file setting 
 	 * First character of each sentence to Capital letter
@@ -20,7 +18,7 @@ public class Problem1 {
 	public void convertFirstCharacterToUpperCase(String inputFilePath, String outputFile) {
 
 		try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath));
-				BufferedWriter bw = new BufferedWriter(new FileWriter(OUTPUT_FILE_PATH + outputFile))) {
+				BufferedWriter bw = new BufferedWriter(new FileWriter(outputFile))) {
 
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -41,7 +39,7 @@ public class Problem1 {
 	public void filterSpecialCharacters(String inputFilePath, String outputFile) {
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
-				BufferedWriter writer = new BufferedWriter(new FileWriter(OUTPUT_FILE_PATH + outputFile))) {
+				BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
 
 			String line;
 			while ((line = reader.readLine()) != null) {
@@ -74,7 +72,7 @@ public class Problem1 {
 		String reversedWord = Utilities.reverseWord(longestWord);
 
 		// Write the reversed word to the output file
-		Utilities.writeFile(OUTPUT_FILE_PATH + outputFile, reversedWord);
+		Utilities.writeFile(outputFile, reversedWord);
 		log.info("Reverse longest word and written to output file: " + outputFile);
 	}
 }
